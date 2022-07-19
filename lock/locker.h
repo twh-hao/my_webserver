@@ -28,7 +28,7 @@ public:
 
     ~Sem()
     {
-        sem_destory(&sem_);
+        sem_destroy(&sem_);
     }
 
     bool Wait()
@@ -57,7 +57,7 @@ public:
     }
     ~Locker()
     {
-        pthread_mutex_destory(&mutex_);
+        pthread_mutex_destroy(&mutex_);
     }
     bool Lock()
     {
@@ -99,14 +99,16 @@ public:
     bool TimeWait(pthread_mutex_t *mutex_,struct timespec t)
     {
         int ret=0;
-        ret=pthread_cond_timewait(&cond_,mutex,&t);
+        ret=pthread_cond_timedwait(&cond_,mutex_,&t);
         return ret == 0;
     }
     bool Signal()
     {
         return pthread_cond_signal(&cond_) == 0;
     }
-    bool BroadCast() //一次唤醒所有线程
+    
+    //一次唤醒所有线程
+    bool BroadCast() 
     {
         return pthread_cond_broadcast(&cond_) == 0;
     }

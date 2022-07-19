@@ -25,12 +25,12 @@ public:
     //单例模式
     static ConnectionPool *GetInstance();
 
-    void init(string url_,string user_,string pass_word_,string database_name_,int port_,int max_connection_,int close_log_);
+    void Init(string url_,string user_,string pass_word_,string database_name_,int port_,int max_connection_,int close_log_);
 
 
     string url_; //主机地址
     string port_; //数据库端口号
-    strint user_; //登录数据库用户名
+    string user_; //登录数据库用户名
     string pass_word_; //登录数据库密码
     string database_name_; //使用数据库名
     int close_log_; //日志开关
