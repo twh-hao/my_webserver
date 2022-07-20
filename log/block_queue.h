@@ -17,7 +17,7 @@ template <class T>
 class BlockQueue
 {
 public:
-    BlockQueue(init max_size=1000)
+    BlockQueue(int max_size=1000)
     {
         if (max_size <= 0)
         {
@@ -148,7 +148,7 @@ public:
             }
         }
 
-        front_=(ront_+1)%max_size_;
+        front_=(front_+1)%max_size_;
         item= array_[front_];
         size_--;
         mutex_.UnLock();

@@ -13,12 +13,12 @@ using namespace std;
 class Log
 {
 public:
-    static Log* GetInstace()
+    static Log* GetInstance()
     {
         static Log instance;
-        return instance;
+        return &instance;
     }
-
+    //异步写日志
     static void* FlushLogThread(void *args)
     {
         Log::GetInstance()->AsynchronousWriteLog();
@@ -57,16 +57,16 @@ private:
     long long count_; //日志行数记录
     int today_; //当前天数
     FILE *fp_; //打开log的文件指针
-    char buffer_;
+    char *buffer_;
     BlockQueue<string> *log_queue_; //阻塞队列
     bool is_asynchronous_; //是否同步标志
     Locker mutex_;
     int close_log_; //关闭日志
 };
 
-#define LOG_DEBUG(format, ...) if(0 == close_log_) {Log::GetInstace()->WriteLog(0, format, ##__VA_ARGS__); Log::GetInstace()->Flush();}
-#define LOG_INFO(format, ...) if(0 == close_log_) {Log::GetInstace()->WriteLog(1, format, ##__VA_ARGS__); Log::GetInstace()->Flush();}
-#define LOG_WARN(format, ...) if(0 == close_log_) {Log::GetInstacee()->WriteLog(2, format, ##__VA_ARGS__); Log::GetInstace()->Flush();}
-#define LOG_ERROR(format, ...) if(0 == close_log_) {Log::GetInstace()->WriteLog(3, format, ##__VA_ARGS__); Log::GetInstace()->Flush();}
+#define LOG_DEBUG(format, ...) if(0 == close_log_) {Log::GetInstance()->WriteLog(0, format, ##__VA_ARGS__); Log::GetInstance()->Flush();}
+#define LOG_INFO(format, ...) if(0 == close_log_) {Log::GetInstance()->WriteLog(1, format, ##__VA_ARGS__); Log::GetInstance()->Flush();}
+#define LOG_WARN(format, ...) if(0 == close_log_) {Log::GetInstance()->WriteLog(2, format, ##__VA_ARGS__); Log::GetInstance()->Flush();}
+#define LOG_ERROR(format, ...) if(0 == close_log_) {Log::GetInstance()->WriteLog(3, format, ##__VA_ARGS__); Log::GetInstance()->Flush();}
 
 #endif //LOG_H_

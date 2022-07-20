@@ -20,6 +20,7 @@ public:
 
     Sem(int num)
     {
+        //信号量初始化
         if (sem_init(&sem_,0,num) != 0)
         {
             throw std::exception();
@@ -31,11 +32,12 @@ public:
         sem_destroy(&sem_);
     }
 
+    //减小或者锁定当前信号的值
     bool Wait()
     {
         return sem_wait(&sem_) == 0;
     }
-
+    //信号量的值加1
     bool Post()
     {
         return sem_post(&sem_) == 0;
@@ -59,10 +61,12 @@ public:
     {
         pthread_mutex_destroy(&mutex_);
     }
+    //互斥锁上锁
     bool Lock()
     {
         return pthread_mutex_lock(&mutex_) == 0;
     }
+    //互斥锁解锁
     bool UnLock()
     {
         return pthread_mutex_unlock(&mutex_) == 0;
@@ -90,18 +94,21 @@ public:
     {
         pthread_cond_destroy(&cond_);
     }
+    //阻塞当前线程，等待别的线程唤醒
     bool Wait(pthread_mutex_t &mutex_) //指针改为引用
     {
         int ret=0;
         ret=pthread_cond_wait(&cond_,&mutex_);
         return ret == 0;
     }
+    //等待条件变量，设置等待时间
     bool TimeWait(pthread_mutex_t *mutex_,struct timespec t)
     {
         int ret=0;
         ret=pthread_cond_timedwait(&cond_,mutex_,&t);
         return ret == 0;
     }
+    //发送一个信号给另外一个正在处于阻塞等待状态的线程,使其脱离阻塞状态,继续执行
     bool Signal()
     {
         return pthread_cond_signal(&cond_) == 0;
